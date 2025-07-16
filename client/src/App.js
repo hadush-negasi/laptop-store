@@ -9,6 +9,8 @@ import Header from "./components/Header";
 import Cart from "./components/Cart";
 import Register from "./components/Register";
 import Logout from "./components/Logout";
+import ProductDetail from './components/productDetail';
+
 function App() {
   
   return (
@@ -22,6 +24,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/products/:id" element={<ProductDetail />} />
       </Routes>
       
     </div>

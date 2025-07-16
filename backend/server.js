@@ -22,7 +22,7 @@ app.use('/api/products', productRoutes);
 app.get('/', (req, res) => {
   res.send('Backend server is running 🚀');
 });
-console.log('Attempting to connect to:', process.env.MONGO_URI);
+//console.log('Attempting to connect to:', process.env.MONGO_URI);
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {

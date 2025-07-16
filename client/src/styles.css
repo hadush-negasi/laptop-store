@@ -1,0 +1,64 @@
+/* Base Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+/* Text Colors */
+.text-primary {
+  color: #0d6efd !important;
+}
+
+/* Background Colors */
+.bg-primary {
+  background-color: #0d6efd !important;
+}
+
+/* Transitions */
+.transition {
+  transition: all 0.3s ease;
+}
+
+/* Hover Effects */
+.hover-shadow:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Custom Shadows */
+.shadow-sm {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+/* Spacing Utilities */
+.max-w-3xl {
+  max-width: 48rem;
+}
+
+/* Button Hover Effects */
+.btn-primary:hover {
+  background-color: #0b5ed7 !important;
+  border-color: #0a58ca !important;
+}
+
+/* Form Controls */
+.form-control:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Responsive Images */
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Object Fit */
+.object-fit-contain {
+  object-fit: contain;
+}
+
+/* Custom Badge */
+.badge {
+  font-weight: 500;
+}

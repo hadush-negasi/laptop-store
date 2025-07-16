@@ -1,78 +1,73 @@
-const initialState = []
+const initialState = {
+  products: [], // For cart items
+  productDetail: null // For the currently viewed product
+};
 
-const productReducer = (state=initialState,action)=>{
-    console.log("state >>",state)
-    switch(action.type){
-        case 'ADD_PRODUCT':{
-            action.payload.proCount = action.payload.proCount + 1
-            console.log("action payload new",action.payload)
-           
-            if(state.length!==0 && state.find(item=>item.id == action.payload.id) ){
-                    
-                return state.map((prod,index)=>{
-                        if(prod.id === action.payload.id){
-                            console.log("your name is:",action.payload.name)
-                            console.log("your id is ",action.payload.id)
-                            return {...prod,...action.payload}
-                        }
-                        else{
-                             return prod
-                        }
-                        
-                    })
-                   
-           
-          }
-       
-          else if(state.length!==0 && state.find(item=>item.id !== action.payload.id)){
-            return [...state,action.payload]
-          }
-          else {
-            return [...state,action.payload]
-          }
-         
-           
-        }
-       
-        case 'REMOVE_PRODUCT':{
-
-            action.payload.proCount = action.payload.proCount - 1
-
-            if(state.length!==0 && action.payload.proCount >0 && state.find(item=>item.id == action.payload.id)){
-               
-                return state.map((prod,index)=>{
-                    if(prod.id === action.payload.id){
-                        console.log("your name is:",action.payload.name)
-                        console.log("your id is ",action.payload.id)
-                        return {...prod,...action.payload}
-                    }
-                    else{
-                         return prod
-                    }
-                    
-                })
-            }
-            else {
-                return state.filter((ele)=>{
-                    return ele.id!==action.payload.id
-                })
-            }
-            
-        }
-        case  'EDIT_PRODUCT':{
-            return state.map((prod)=>{
-                if(prod.id==action.prod){
-                    return {...prod,...action.payload}
-                }
-                else {
-                    return {...prod}
-               }
-            })
-        }
-       default:{
-        return [...state]
-       }
-
+const productReducer = (state = initialState, action) => {
+  switch(action.type) {
+    case 'ADD_PRODUCT': {
+      const existingProduct = state.products.find(item => item._id === action.payload.id);
+      
+      if (existingProduct) {
+        return {
+          ...state,
+          products: state.products.map(product => 
+            product._id === action.payload.id 
+              ? { ...product, proCount: product.proCount + 1 }
+              : product
+          )
+        };
+      }
+      
+      return {
+        ...state,
+        products: [...state.products, { ...action.payload, proCount: 1 }]
+      };
     }
-}
-export default productReducer
+    
+    case 'REMOVE_PRODUCT': {
+      const existingProduct = state.products.find(item => item.id === action.payload.id);
+      
+      if (!existingProduct) return state;
+      
+      if (existingProduct.proCount > 1) {
+        return {
+          ...state,
+          products: state.products.map(product => 
+            product.id === action.payload.id 
+              ? { ...product, proCount: product.proCount - 1 }
+              : product
+          )
+        };
+      }
+      
+      return {
+        ...state,
+        products: state.products.filter(product => product.id !== action.payload.id)
+      };
+    }
+    
+    case 'EDIT_PRODUCT': {
+      return {
+        ...state,
+        products: state.products.map(product => 
+          product.id === action.payload.id 
+            ? { ...product, ...action.payload }
+            : product
+        )
+      };
+    }
+    
+    case 'SET_PRODUCT_DETAIL': {
+      return {
+        ...state,
+        productDetail: action.payload
+      };
+    }
+    
+    default:
+      return state;
+  }
+};
+
+export default productReducer;
