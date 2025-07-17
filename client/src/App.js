@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Login from "./components/Login";
+import Account from "./components/Account";
 import { Route,Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Cart from "./components/Cart";
@@ -24,6 +25,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/account" element={<Account />} />
         <Route path="/products/:id" element={<ProductDetail />} />
       </Routes>
       

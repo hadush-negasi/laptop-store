@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase'; // Adjust the path
 import { Container, Button, Form, Card, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import '../styles.css';
+import axios from 'axios'; // If you're storing extra info in MongoDB
 
 const Register = () => {
   const [formData, setFormData] = useState({
+    email: '',
+    password: '',
     fname: '',
     lname: '',
-    uname: '',
-    password: '',
+    age: '',
+    country: '',
+    address: '',
     gender: ''
   });
   const [error, setError] = useState('');
@@ -28,13 +33,24 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+    setSuccess(false);
+
     try {
-      await axios.post('http://localhost:5000/api/users/register', formData);
+      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      const firebaseUser = userCredential.user;
+
+      // Optionally: send extra user info to your backend (Node/MongoDB)
+      const {password, ...userData} = formData; // remove password field before sending it to backend
+      await axios.post('http://localhost:5000/api/users/register', {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        ...userData
+      });
+
       setSuccess(true);
     } catch (err) {
-      console.error('Register error:', err);
-      setError(err.response?.data?.message || 'Registration failed.');
+      console.error('Firebase register error:', err);
+      setError(err.message || 'Registration failed.');
     } finally {
       setLoading(false);
     }
@@ -61,54 +77,45 @@ const Register = () => {
       <Card className="border-0 shadow-sm mx-auto" style={{ maxWidth: '500px' }}>
         <Card.Body className="p-4 p-md-5">
           <h2 className="text-center mb-4 fw-bold">Create Account</h2>
-          
+
           {error && <Alert variant="danger">{error}</Alert>}
-          
+
           <Form onSubmit={handleRegister}>
             <Form.Group className="mb-3">
               <Form.Label>First Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="fname"
-                value={formData.fname}
-                onChange={handleChange}
-                required
-              />
+              <Form.Control type="text" name="fname" value={formData.fname} onChange={handleChange} required />
             </Form.Group>
-            
+
             <Form.Group className="mb-3">
               <Form.Label>Last Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="lname"
-                value={formData.lname}
-                onChange={handleChange}
-                required
-              />
+              <Form.Control type="text" name="lname" value={formData.lname} onChange={handleChange} required />
             </Form.Group>
             
             <Form.Group className="mb-3">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                type="text"
-                name="uname"
-                value={formData.uname}
-                onChange={handleChange}
-                required
-              />
+              <Form.Label>Email</Form.Label>
+              <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} required />
             </Form.Group>
-            
+
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
+              <Form.Control type="password" name="password" value={formData.password} onChange={handleChange} required />
             </Form.Group>
-            
+
+            <Form.Group className="mb-3">
+              <Form.Label>Age</Form.Label>
+              <Form.Control type="number" name="age" value={formData.age} onChange={handleChange} required />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Country</Form.Label>
+              <Form.Control type="text" name="country" value={formData.country} onChange={handleChange} required />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Address</Form.Label>
+              <Form.Control type="text" name="address" value={formData.address} onChange={handleChange} required />
+            </Form.Group>
+
             <Form.Group className="mb-4">
               <Form.Label>Gender</Form.Label>
               <div className="d-flex gap-4">
@@ -130,22 +137,14 @@ const Register = () => {
                 />
               </div>
             </Form.Group>
-            
-            <Button 
-              variant="primary" 
-              type="submit" 
-              className="w-100 py-2 mb-3"
-              disabled={loading}
-            >
+
+            <Button variant="primary" type="submit" className="w-100 py-2 mb-3" disabled={loading}>
               {loading ? 'Registering...' : 'Register'}
             </Button>
-            
+
             <div className="text-center">
               <small className="text-muted">
-                Already have an account?{' '}
-                <Link to="/login" className="text-primary">
-                  Login here
-                </Link>
+                Already have an account? <Link to="/login" className="text-primary">Login here</Link>
               </small>
             </div>
           </Form>

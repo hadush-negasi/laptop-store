@@ -5,28 +5,20 @@ const User = require('../models/user');
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const newUser = new User(req.body);
-    await newUser.save();
-    res.json({ message: 'User registered successfully' });
+    const {uid, email} = req.body;
+    const existingUser = await User.findOne({uid});
+    if(existingUser){
+      return res.status(400).json({message: "User already exists."});
+    }
+    const user = new User(req.body);
+    await user.save();
+    res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
+    console.log('user data storing error', err);
     res.status(500).json({ error: 'Registration failed' });
   }
 });
 
-// Login
-router.post('/login', async (req, res) => {
-  const { uname, password } = req.body;
-  try {
-    const user = await User.findOne({ uname, password });
-    if (user) {
-      res.json({ token: true, user: user.uname });
-    } else {
-      res.status(401).json({ token: false, error: 'Invalid credentials' });
-    }
-  } catch (err) {
-    res.status(500).json({ error: 'Login failed' });
-  }
-});
 
 // ➕ Create a new user
 router.post('/', async (req, res) => {
@@ -50,12 +42,15 @@ router.get('/', async (req, res) => {
 });
 
 // 📤 Get a single user by ID
-router.get('/:id', async (req, res) => {
+router.get('/:uid', async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const {uid} = req.params;
+    console.log(uid);
+    const user = await User.findOne({uid});
     if (!user) return res.status(404).json({ error: 'User not found' });
     res.json(user);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 });

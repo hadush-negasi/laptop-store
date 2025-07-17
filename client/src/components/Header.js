@@ -1,6 +1,6 @@
 import React from 'react';
-import { Container, Navbar, Nav, Button, Badge } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Container, Navbar, Nav, Button, Dropdown } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiShoppingCart, FiUser } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { remAuth } from './Actions';
@@ -10,13 +10,12 @@ const Header = () => {
   const { products: cartItems } = useSelector(state => state.productReducer);
   const authState = useSelector(state => state.AuthReducer);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    dispatch(remAuth());
-  };
+  const token = localStorage.getItem('token');
+  const isLoggedIn = token !== null;
+  const user = JSON.parse(localStorage.getItem('user')); // optional
 
-  // Safely calculate cart item count
   const cartItemCount = Array.isArray(cartItems) 
     ? cartItems.reduce((total, item) => total + (item.proCount || 0), 0)
     : 0;
@@ -27,9 +26,9 @@ const Header = () => {
         <Navbar.Brand as={Link} to="/" className="fw-bold fs-4 text-primary">
           LaptopStore
         </Navbar.Brand>
-        
+
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        
+
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/" className="px-3 text-dark hover:text-primary transition">
@@ -42,7 +41,7 @@ const Header = () => {
               Contact
             </Nav.Link>
           </Nav>
-          
+
           <Nav className="align-items-center">
             <Nav.Link as={Link} to="/cart" className="position-relative mx-3 p-2">
               <FiShoppingCart size={20} className="text-dark hover:text-primary transition" />
@@ -52,15 +51,12 @@ const Header = () => {
                 </span>
               )}
             </Nav.Link>
-            
-            {authState.length > 0 ? (
-              <Button 
-                variant="outline-danger" 
-                onClick={handleLogout}
-                className="ms-3"
-              >
-                Logout
-              </Button>
+
+            {isLoggedIn ? (
+              <Nav.Link as={Link} to="/account" className="ms-3 d-flex align-items-center gap-1">
+                <FiUser size={18} />
+                Account
+              </Nav.Link>
             ) : (
               <Nav.Link 
                 as={Link} 

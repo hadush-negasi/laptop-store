@@ -6,13 +6,13 @@ const initialState = {
 const productReducer = (state = initialState, action) => {
   switch(action.type) {
     case 'ADD_PRODUCT': {
-      const existingProduct = state.products.find(item => item._id === action.payload.id);
+      const existingProduct = state.products.find(item => item._id === action.payload._id);
       
       if (existingProduct) {
         return {
           ...state,
           products: state.products.map(product => 
-            product._id === action.payload.id 
+            product._id === action.payload._id 
               ? { ...product, proCount: product.proCount + 1 }
               : product
           )
@@ -26,7 +26,7 @@ const productReducer = (state = initialState, action) => {
     }
     
     case 'REMOVE_PRODUCT': {
-      const existingProduct = state.products.find(item => item.id === action.payload.id);
+      const existingProduct = state.products.find(item => item._id === action.payload._id);
       
       if (!existingProduct) return state;
       
@@ -34,7 +34,7 @@ const productReducer = (state = initialState, action) => {
         return {
           ...state,
           products: state.products.map(product => 
-            product.id === action.payload.id 
+            product._id === action.payload._id 
               ? { ...product, proCount: product.proCount - 1 }
               : product
           )
@@ -43,7 +43,7 @@ const productReducer = (state = initialState, action) => {
       
       return {
         ...state,
-        products: state.products.filter(product => product.id !== action.payload.id)
+        products: state.products.filter(product => product._id !== action.payload._id)
       };
     }
     
@@ -51,7 +51,7 @@ const productReducer = (state = initialState, action) => {
       return {
         ...state,
         products: state.products.map(product => 
-          product.id === action.payload.id 
+          product._id === action.payload._id 
             ? { ...product, ...action.payload }
             : product
         )
