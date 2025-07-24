@@ -17,15 +17,15 @@ const Products = () => {
 
   const dispatch = useDispatch();
 
-  const fetchProducts = async (pageNum = 1) => {
-    try {
-      const res = await axios.get(`${API_BASE}/api/products?page=${pageNum}&limit=20`);
-      return res.data;
-    } catch (error) {
-      console.error('Error fetching products:', error);
-      return { products: [], total: 0 };
-    }
-  };
+ const fetchProducts = useCallback(async (pageNum = 1) => {
+  try {
+    const res = await axios.get(`${API_BASE}/api/products?page=${pageNum}&limit=20`);
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return { products: [], total: 0 };
+  }
+}, []);
 
   useEffect(() => {
     // Initial fetch
@@ -34,7 +34,7 @@ const Products = () => {
       setTotal(data.total);
       setLoading(false);
     });
-  }, []);
+  }, [fetchProducts]);
 
   const loadMore = () => {
     setLoadingMore(true);
