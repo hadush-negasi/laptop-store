@@ -26,12 +26,24 @@ router.post('/bulk', async (req, res) => {
 // 📥 Get all products
 router.get('/', async (req, res) => {
   try {
-    const products = await Product.find();
-    res.json(products);
+    // Parse query params (default page=1, limit=20)
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    const products = await Product.find()
+      .skip(skip)
+      .limit(limit);
+
+    // Optionally send total count for frontend pagination controls
+    const total = await Product.countDocuments();
+
+    res.json({ products, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // 📤 Get a product by ID
 router.get('/:id', async (req, res) => {

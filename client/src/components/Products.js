@@ -10,19 +10,40 @@ import "../styles.css";
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
+
   const dispatch = useDispatch();
 
+  const fetchProducts = async (pageNum = 1) => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/products?page=${pageNum}&limit=20`);
+      return res.data;
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return { products: [], total: 0 };
+    }
+  };
+
   useEffect(() => {
-    axios.get('http://localhost:5000/api/products')
-      .then((res) => {
-        setProducts(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log('Error fetching products:', err);
-        setLoading(false);
-      });
+    // Initial fetch
+    fetchProducts().then(data => {
+      setProducts(data.products);
+      setTotal(data.total);
+      setLoading(false);
+    });
   }, []);
+
+  const loadMore = () => {
+    setLoadingMore(true);
+    const nextPage = page + 1;
+    fetchProducts(nextPage).then(data => {
+      setProducts(prev => [...prev, ...data.products]);
+      setPage(nextPage);
+      setLoadingMore(false);
+    });
+  };
 
   const addCart = (product) => {
     dispatch(add(product));
@@ -43,31 +64,28 @@ const Products = () => {
   return (
     <Container className="py-5">
       <h1 className="text-center mb-5 fw-bold">Our Products</h1>
-      
+
       <Row xs={1} md={2} lg={3} xl={4} className="g-4">
-        {products.map((product) => (
-          <Col key={product.id}>
+        {products.map(product => (
+          <Col key={product._id}>
             <Card className="h-100 border-0 shadow-sm hover-shadow transition cursor-pointer">
               <Link to={`/products/${product._id}`} className="text-decoration-none">
                 <div className="ratio ratio-1x1 bg-light">
-                  <Card.Img 
-                    variant="top" 
-                    src={product.image} 
+                  <Card.Img
+                    variant="top"
+                    src={product.img_link || product.image} // Adjust field name if needed
                     className="object-fit-contain p-3"
                   />
                 </div>
                 <Card.Body className="d-flex flex-column">
                   <Card.Title className="fw-bold mb-2 text-dark">{product.name}</Card.Title>
-                  <Card.Text className="text-muted small mb-3 flex-grow-1">
-                    {product.description.substring(0, 60)}...
-                  </Card.Text>
                 </Card.Body>
               </Link>
 
               <div className="d-flex justify-content-between align-items-center px-3 pb-3">
                 <span className="fw-bold text-primary fs-5">₹{product.price}</span>
-                <Button 
-                  variant="outline-primary" 
+                <Button
+                  variant="outline-primary"
                   size="sm"
                   onClick={() => addCart(product)}
                   className="rounded-circle p-2"
@@ -75,10 +93,19 @@ const Products = () => {
                   <FiShoppingCart size={18} />
                 </Button>
               </div>
-            </Card>  
+            </Card>
           </Col>
         ))}
       </Row>
+
+      {/* Load More Button */}
+      {products.length < total && (
+        <div className="text-center mt-4">
+          <Button onClick={loadMore} disabled={loadingMore}>
+            {loadingMore ? 'Loading...' : 'Load More'}
+          </Button>
+        </div>
+      )}
     </Container>
   );
 };

@@ -32,20 +32,40 @@ const ProductDetail = () => {
     }
   };
 
-  const productInCart = cartItems.find(item => item.id === id);
+  const productInCart = cartItems.find(item => item._id === id);
   const cartQuantity = productInCart ? productInCart.proCount : 0;
+
+  if (productDetail === null) {
+    return (
+      <Container className="py-5 text-center">
+        <h4>Product not found</h4>
+      </Container>
+    );
+  }
 
   if (!productDetail) {
     return (
       <Container className="py-5 text-center">
-        {productDetail === null ? (
-          <h4>Product not found</h4>
-        ) : (
-          <Spinner animation="border" variant="primary" />
-        )}
+        <Spinner animation="border" variant="primary" />
       </Container>
     );
   }
+
+  const {
+    name,
+    price,
+    processor,
+    ram,
+    os,
+    storage,
+    display,
+    rating,
+    no_of_ratings,
+    no_of_reviews,
+    img_link,
+  } = productDetail;
+
+  const brand = name.split(" ")[0];
 
   return (
     <Container className="py-5">
@@ -53,48 +73,48 @@ const ProductDetail = () => {
         <Col lg={6}>
           <div className="bg-white p-4 rounded-3 shadow-sm">
             <img 
-              src={productDetail.image} 
-              alt={productDetail.name}
+              src={img_link} 
+              alt={name}
               className="img-fluid rounded-3"
             />
           </div>
         </Col>
-        
+
         <Col lg={6}>
           <div className="bg-white p-4 rounded-3 shadow-sm h-100">
-            <h1 className="mb-3 fw-bold">{productDetail.name}</h1>
+            <h1 className="mb-3 fw-bold">{name}</h1>
+
             <div className="d-flex align-items-center mb-3">
-              <Badge bg="primary" className="me-2">New</Badge>
+              <Badge bg="primary" className="me-2">{brand}</Badge>
               <div className="text-warning">
-                ★★★★★ (24 reviews)
+                ★ {rating || 0} ({no_of_reviews || 0} reviews)
               </div>
             </div>
-            
-            <h2 className="text-primary mb-4">₹{productDetail.price}</h2>
-            
-            <p className="mb-4">{productDetail.description}</p>
-            
+
+            <h2 className="text-primary mb-4">₹{price}</h2>
+
             <div className="mb-4">
               <h5 className="fw-bold mb-3">Specifications</h5>
               <ul className="list-unstyled">
-                <li className="mb-2"><strong>Brand:</strong> {productDetail.brand || 'N/A'}</li>
-                <li className="mb-2"><strong>Processor:</strong> {productDetail.processor || 'N/A'}</li>
-                <li className="mb-2"><strong>RAM:</strong> {productDetail.ram || 'N/A'}</li>
-                <li className="mb-2"><strong>Storage:</strong> {productDetail.storage || 'N/A'}</li>
+                <li className="mb-2"><strong>Brand:</strong> {brand}</li>
+                <li className="mb-2"><strong>Processor:</strong> {processor || 'N/A'}</li>
+                <li className="mb-2"><strong>RAM:</strong> {ram || 'N/A'}</li>
+                <li className="mb-2"><strong>OS:</strong> {os || 'N/A'}</li>
+                <li className="mb-2"><strong>Storage:</strong> {storage || 'N/A'}</li>
+                <li className="mb-2"><strong>Display:</strong> {display || 'N/A'}</li>
+                <li className="mb-2"><strong>Ratings Count:</strong> {no_of_ratings || 0}</li>
               </ul>
             </div>
-            
-            <div className="d-flex align-items-center">
-              <Button 
-                variant="primary" 
-                size="lg" 
-                className="py-3 flex-grow-1"
-                onClick={addToCart}
-              >
-                <FiShoppingCart className="me-2" />
-                Add to Cart {cartQuantity > 0 && `(${cartQuantity})`}
-              </Button>
-            </div>
+
+            <Button 
+              variant="primary" 
+              size="lg" 
+              className="py-3 flex-grow-1"
+              onClick={addToCart}
+            >
+              <FiShoppingCart className="me-2" />
+              Add to Cart {cartQuantity > 0 && `(${cartQuantity})`}
+            </Button>
           </div>
         </Col>
       </Row>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Container, Navbar, Nav, Button, Dropdown } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Navbar, Nav, Form, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiShoppingCart, FiUser } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,13 +8,18 @@ import '../styles.css';
 
 const Header = () => {
   const { products: cartItems } = useSelector(state => state.productReducer);
-  const authState = useSelector(state => state.AuthReducer);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const token = localStorage.getItem('token');
   const isLoggedIn = token !== null;
-  const user = JSON.parse(localStorage.getItem('user')); // optional
+  const navigate = useNavigate();
+
+  const [searchInput, setSearchInput] = useState('');
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchInput.trim()) {
+      navigate(`/?search=${encodeURIComponent(searchInput.trim())}`);
+    }
+  };
 
   const cartItemCount = Array.isArray(cartItems) 
     ? cartItems.reduce((total, item) => total + (item.proCount || 0), 0)
@@ -31,20 +36,33 @@ const Header = () => {
 
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/" className="px-3 text-dark hover:text-primary transition">
+            <Nav.Link as={Link} to="/" className="px-3 text-dark">
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/about" className="px-3 text-dark hover:text-primary transition">
+            <Nav.Link as={Link} to="/about" className="px-3 text-dark">
               About
             </Nav.Link>
-            <Nav.Link as={Link} to="/contact" className="px-3 text-dark hover:text-primary transition">
+            <Nav.Link as={Link} to="/contact" className="px-3 text-dark">
               Contact
             </Nav.Link>
           </Nav>
 
+          <Form className="d-flex me-3" onSubmit={handleSearch}>
+            <Form.Control
+              type="search"
+              placeholder="Search laptops..."
+              className="me-2"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+            />
+            <Button type="submit" variant="outline-primary">
+              Search
+            </Button>
+          </Form>
+
           <Nav className="align-items-center">
             <Nav.Link as={Link} to="/cart" className="position-relative mx-3 p-2">
-              <FiShoppingCart size={20} className="text-dark hover:text-primary transition" />
+              <FiShoppingCart size={20} />
               {cartItemCount > 0 && (
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {cartItemCount}

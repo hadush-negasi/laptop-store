@@ -43,7 +43,7 @@ const Cart = () => {
                 <div key={index} className="d-flex border-bottom pb-3 mb-3 align-items-center">
                   <div className="me-3" style={{ width: '80px' }}>
                     <img 
-                      src={item.image} 
+                      src={item.img_link} 
                       alt={item.name}
                       className="img-fluid rounded-2"
                     />
