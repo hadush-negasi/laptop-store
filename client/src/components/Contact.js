@@ -32,7 +32,7 @@ const Contact = () => {
                   <FiMail size={20} className="text-primary mt-1 me-3" />
                   <div>
                     <h6 className="mb-1 fw-bold">Email</h6>
-                    <p className="text-muted mb-0">info@laptopstore.com</p>
+                    <p className="text-muted mb-0">hadush7512@gmail.com</p>
                   </div>
                 </div>
                 
@@ -40,7 +40,7 @@ const Contact = () => {
                   <FiPhone size={20} className="text-primary mt-1 me-3" />
                   <div>
                     <h6 className="mb-1 fw-bold">Phone</h6>
-                    <p className="text-muted mb-0">(+91) 281 - 7123456</p>
+                    <p className="text-muted mb-0">(+251) 998317320 </p>
                   </div>
                 </div>
                 
@@ -70,36 +70,26 @@ const Contact = () => {
             <Card.Body className="p-4 p-lg-5">
               <h3 className="mb-4 fw-bold">Send Us a Message</h3>
               
-              <Form onSubmit={handleSubmit}>
+              <Form 
+                action="https://formsubmit.co/hadush7512@gmail.com" 
+                method="POST"
+              >
+                <input type="hidden" name="_captcha" value="false" />
+                <input type="hidden" name="_next" value="https://yourdomain.com/thank-you" />
+                
                 <Form.Group className="mb-3">
                   <Form.Label>Your Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    required
-                  />
+                  <Form.Control type="text" name="name" required />
                 </Form.Group>
                 
                 <Form.Group className="mb-3">
                   <Form.Label>Email Address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    required
-                  />
+                  <Form.Control type="email" name="email" required />
                 </Form.Group>
                 
                 <Form.Group className="mb-4">
                   <Form.Label>Message</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={5}
-                    value={formData.message}
-                    onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    required
-                  />
+                  <Form.Control as="textarea" rows={5} name="message" required />
                 </Form.Group>
                 
                 <Button variant="primary" type="submit" className="w-100 py-2">
