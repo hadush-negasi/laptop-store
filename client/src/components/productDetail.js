@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Container, Row, Col, Card, Badge, Spinner } from 'react-bootstrap';
+import { Button, Container, Row, Col, Badge, Spinner } from 'react-bootstrap';
 import { FiShoppingCart } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { add, setProductDetail } from './Actions';

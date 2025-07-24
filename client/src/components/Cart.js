@@ -1,5 +1,4 @@
 import React from 'react';
-import { CurrencyRupee } from 'react-bootstrap-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Container, Row, Col, Card, Badge } from 'react-bootstrap';
 import { add, remove } from './Actions';

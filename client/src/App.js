@@ -1,4 +1,3 @@
-import { Button } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from "./components/Home";
 import About from "./components/About";

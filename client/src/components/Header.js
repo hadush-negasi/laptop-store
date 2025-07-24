@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Container, Navbar, Nav, Form, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiShoppingCart, FiUser } from 'react-icons/fi';
-import { useDispatch, useSelector } from 'react-redux';
-import { remAuth } from './Actions';
+import { useSelector } from 'react-redux';
 import '../styles.css';
 
 const Header = () => {
