@@ -4,19 +4,6 @@ import { FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
 import '../styles.css';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission
-    alert('Thank you for your message! We will get back to you soon.');
-    setFormData({ name: '', email: '', message: '' });
-  };
-
   return (
     <Container className="py-5">
       <h1 className="text-center fw-bold mb-5">Contact Us</h1>
