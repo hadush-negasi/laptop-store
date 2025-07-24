@@ -7,6 +7,7 @@ import '../styles.css';
 import axios from 'axios'; // If you're storing extra info in MongoDB
 
 const Register = () => {
+  const API_BASE = process.env.REACT_APP_API_BASE_URL;
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -41,7 +42,7 @@ const Register = () => {
 
       // Optionally: send extra user info to your backend (Node/MongoDB)
       const {password, ...userData} = formData; // remove password field before sending it to backend
-      await axios.post('http://localhost:5000/api/users/register', {
+      await axios.post(`${API_BASE}/api/users/register`, {
         uid: firebaseUser.uid,
         email: firebaseUser.email,
         ...userData

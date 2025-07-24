@@ -7,6 +7,7 @@ import '../styles.css';
 import axios from 'axios';
 
 const Login = () => {
+  const API_BASE = process.env.REACT_APP_API_BASE_URL;
   const [email, setEmail] = useState('');
   const [userPass, setUserPass] = useState('');
   const [error, setError] = useState('');
@@ -28,7 +29,7 @@ const Login = () => {
       localStorage.setItem('uid', user.uid);
 
       // fetch user info from mongodb using firebase uid
-      const res = await axios.get(`http://localhost:5000/api/users/${user.uid}`);
+      const res = await axios.get(`${API_BASE}/api/users/${user.uid}`);
       localStorage.setItem('user', JSON.stringify(res.data));
 
       navigate('/');

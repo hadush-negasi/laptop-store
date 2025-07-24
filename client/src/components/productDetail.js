@@ -7,6 +7,7 @@ import { add, setProductDetail } from './Actions';
 import axios from 'axios';
 
 const ProductDetail = () => {
+  const API_BASE = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams();
   const dispatch = useDispatch();
   const { productDetail } = useSelector(state => state.productReducer);
@@ -15,7 +16,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const response = await axios.get(`${API_BASE}/api/products/${id}`);
         dispatch(setProductDetail(response.data));
       } catch (error) {
         console.error('Error fetching product:', error);

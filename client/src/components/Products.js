@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import "../styles.css";
 
 const Products = () => {
+  const API_BASE = process.env.REACT_APP_API_BASE_URL;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -18,7 +19,7 @@ const Products = () => {
 
   const fetchProducts = async (pageNum = 1) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/products?page=${pageNum}&limit=20`);
+      const res = await axios.get(`${API_BASE}/api/products?page=${pageNum}&limit=20`);
       return res.data;
     } catch (error) {
       console.error('Error fetching products:', error);
