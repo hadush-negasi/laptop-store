@@ -10,10 +10,6 @@ dist/
 # Environment variables
 .env
 backend/.env
-client/.
-
-src/firebase.js
-
 
 # Log files
 *.log
