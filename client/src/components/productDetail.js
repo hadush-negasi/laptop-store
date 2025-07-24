@@ -25,7 +25,7 @@ const ProductDetail = () => {
     };
 
     fetchProduct();
-  }, [id, dispatch]);
+  }, [API_BASE,id, dispatch]);
 
   const addToCart = () => {
     if (productDetail) {
