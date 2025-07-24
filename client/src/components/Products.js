@@ -25,7 +25,7 @@ const Products = () => {
     console.error('Error fetching products:', error);
     return { products: [], total: 0 };
   }
-}, []);
+}, [API_BASE]);
 
   useEffect(() => {
     // Initial fetch
