@@ -16,6 +16,7 @@ A modern full-stack laptop shopping platform with authentication, cart functiona
   <img src="screenshots/homepage.png" alt="Homepage" width="45%"/>
   <img src="screenshots/detail-page.png" alt="Product detail Page" width="45%"/> 
   <img src="screenshots/checkout-page.png" alt="Shopping Cart" width="45%"/>
+  <img src="screenshots/laptop-search-page.png" alt="Products search page" width="45%" />
   <br/>
   <img src="screenshots/login-page.png" alt="Checkout" width="45%"/>
   <img src="screenshots/account-page.png" alt="Checkout" width="45%"/>
