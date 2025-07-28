@@ -59,7 +59,7 @@ const SearchProduct = () => {
     }
 
     setTotal(data.total);
-  }, [filters, API_BASE]);
+  }, [filters]);
 
 
 
