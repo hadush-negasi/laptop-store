@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Navbar, Nav, Form, Button } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FiShoppingCart, FiUser } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import '../styles.css';
@@ -10,13 +10,23 @@ const Header = () => {
   const token = localStorage.getItem('token');
   const isLoggedIn = token !== null;
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [searchInput, setSearchInput] = useState('');
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchInput.trim()) {
-      navigate(`/?search=${encodeURIComponent(searchInput.trim())}`);
+      navigate(`/search?query=${encodeURIComponent(searchInput.trim())}`);
+    } else {
+      navigate('/search'); // fallback to search page with all filters
+    }
+  };
+
+  const handleFocus = () => {
+    // Redirect user to /search when they click on the input
+    if (location.pathname !== '/search') {
+      navigate('/search');
     }
   };
 
@@ -53,6 +63,7 @@ const Header = () => {
               className="me-2"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
+              onFocus={handleFocus} // 👈 redirects when user clicks in
             />
             <Button type="submit" variant="outline-primary">
               Search

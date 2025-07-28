@@ -7,13 +7,17 @@ import { add } from './Actions';
 import { Link } from 'react-router-dom';
 import "../styles.css";
 
-const Products = () => {
+const Products = ({products: externalProducts, source}) => {
   const API_BASE = process.env.REACT_APP_API_BASE_URL;
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(externalProducts || []);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
+
+  const title = source === 'search'
+  ? (products.length > 0 ? 'Search Results' : 'No matching products found')
+  : 'All Laptops';
 
   const dispatch = useDispatch();
 
@@ -25,16 +29,22 @@ const Products = () => {
     console.error('Error fetching products:', error);
     return { products: [], total: 0 };
   }
-}, [API_BASE]);
+  }, [API_BASE]);
 
   useEffect(() => {
+    if (externalProducts) {
+      //console.log(externalProducts);
+      setProducts(externalProducts);
+      setLoading(false);
+      return;
+    }
     // Initial fetch
     fetchProducts().then(data => {
       setProducts(data.products);
       setTotal(data.total);
       setLoading(false);
     });
-  }, [fetchProducts]);
+  }, [fetchProducts, externalProducts]);
 
   const loadMore = () => {
     setLoadingMore(true);
@@ -64,7 +74,7 @@ const Products = () => {
 
   return (
     <Container className="py-5">
-      <h1 className="text-center mb-5 fw-bold">Our Products</h1>
+      <h3 className="mb-4 text-center">{title}</h3>
 
       <Row xs={1} md={2} lg={3} xl={4} className="g-4">
         {products.map(product => (

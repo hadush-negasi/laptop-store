@@ -9,6 +9,7 @@ import axios from 'axios';
 const ProductDetail = () => {
   const API_BASE = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams();
+  console.log("current product id: ", id);
   const dispatch = useDispatch();
   const { productDetail } = useSelector(state => state.productReducer);
   const { products: cartItems } = useSelector(state => state.productReducer);

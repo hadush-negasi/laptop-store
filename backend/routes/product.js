@@ -44,10 +44,42 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/search', async (req, res) => {
+  try {
+    console.log("inside /search route");
+    const { query, ram, os, minPrice, maxPrice, page = 1, limit = 20 } = req.query;
+    const filter = {};
+
+    if (query) filter.name = { $regex: query, $options: 'i' };
+    if (ram) filter.ram = { $regex: ram, $options: 'i' };
+    if (os) filter.os = { $regex: os, $options: 'i' };
+
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice !== '') filter.price.$gte = Number(minPrice);
+      if (maxPrice !== '') filter.price.$lte = Number(maxPrice);
+    }
+
+    console.log('FILTER OBJECT:', filter); // 👀 Add this
+    
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    const products = await Product.find(filter).skip(skip).limit(parseInt(limit));
+    const total = await Product.countDocuments(filter);
+
+    res.json({ products, total });
+    //console.log(products);
+  } catch (err) {
+    console.error('Search error:', err); // 👀 See what failed
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 // 📤 Get a product by ID
 router.get('/:id', async (req, res) => {
   try {
+    console.log("inside :id route");
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ error: 'Product not found' });
     res.json(product);

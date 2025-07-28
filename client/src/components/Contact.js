@@ -58,7 +58,7 @@ const Contact = () => {
               <h3 className="mb-4 fw-bold">Send Us a Message</h3>
               
               <Form 
-                action="https://formsubmit.co/hadush7512@gmail.com" 
+                action="https://formsubmit.co/3270b6b54dfaa88bb24c42e15a36db1e" 
                 method="POST"
               >
                 <input type="hidden" name="_captcha" value="false" />
