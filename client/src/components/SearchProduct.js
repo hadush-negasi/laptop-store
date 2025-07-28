@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Products from './Products';
 import { useLocation } from 'react-router-dom';
 const API_BASE = process.env.REACT_APP_API_BASE_URL
@@ -39,7 +39,7 @@ const SearchProduct = () => {
   const [total, setTotal] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const fetchFilteredProducts = async (pageNum = 1, append = false) => {
+  const fetchFilteredProducts = useCallback(async (pageNum = 1, append = false) => {
     const isAllEmpty = Object.values(filters).every(val => val === '');
 
     if (isAllEmpty) {
@@ -55,16 +55,17 @@ const SearchProduct = () => {
       setProducts(prev => [...prev, ...data.products]);
     } else {
       setProducts(data.products);
-      setPage(1); // reset page for new search
+      setPage(1);
     }
 
     setTotal(data.total);
-  };
+  }, [filters, API_BASE]);
+
 
 
   useEffect(() => {
     fetchFilteredProducts();
-  }, [filters]);
+  }, [filters, fetchFilteredProducts]);
 
   const loadMore = () => {
     const nextPage = page + 1;
